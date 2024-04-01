@@ -1,22 +1,33 @@
 /******************************************************************************
  * @file           : main.c
- * @author         : Eng : Mostafa Elshiekh -- Learn In Depth
- * @brief          :Context Switching In RTOS -APP(Master/Slave)communications with UART Session 3
+ * @author         : Mostafa Elshiekh
+ * @brief          : DoorLockIndication_AUTOSAR_Project
  ******************************************************************************/
 #include "DIO.h"
-#include "STM32_F103C6.h"
 #include "STM32F103C6_GPIO_DRIVERS.h"
 #include "Timer.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "FreeRTOSConfig.h"
 
 
+/*================TASKS HANDELS=================*/
+TaskHandle_t xTask_Run_ReadDoorSensor_Handle = NULL;
+TaskHandle_t xTask_Run_DoorLockAlgo_Handle = NULL;
+/*==============================================*/
 
 
-/*Global Variables*/
+/*============Tasks Prototype===========*/
+void Task_Run_ReadDoorSensor(void* params);
+void Task_Run_DoorLockAlgo(void* params);
+/*=====================================*/
+
+
 
 void MCU_HW_Init(void)
 {
-	Timer2_init(); //for delay
+	Timer2_init();
 
 	RCC_GPIOA_CLOCK_EN();
 	GPIO_Pin_Configure_t DIO_DoorConfig;
@@ -30,41 +41,39 @@ void MCU_HW_Init(void)
 	MCAL_GPIO_Init(GPIO_Port_Used, &DIO_LedConfig);
 }
 
-
-void StartOs()
-{
-	uint8_t tick=0;
-
-	while(1)
-	{
-		if(tick==10)
-		{
-			Run_ReadDoorSensor();
-			tick++;
-		}
-		else if(tick==12)
-		{
-			Run_DoorLockAlgo();
-			tick=0;
-		}
-		else
-		{
-			tick++;
-		}
-	}
-	dms(10);
-}
-
 int main(void)
 {
 	MCU_HW_Init();
-	StartOs();
 
+	xTaskCreate(Task_Run_ReadDoorSensor, "Task_Run_ReadDoorSensor", 128, NULL, 1, xTask_Run_ReadDoorSensor_Handle);
+	xTaskCreate(Task_Run_DoorLockAlgo, "Task_Run_DoorLockAlgo", 128, NULL, 2, xTask_Run_DoorLockAlgo_Handle);
+
+	vTaskStartScheduler();
 	while(1)
 	{
 
 	}
-
 	return 0;
 }
+
+
+/*============Tasks Definitions===========*/
+void Task_Run_ReadDoorSensor(void* params)
+{
+	while(1)
+	{
+		Run_ReadDoorSensor();
+		vTaskDelay(10);
+	}
+}
+void Task_Run_DoorLockAlgo(void* params)
+{
+	while(1)
+	{
+		Run_DoorLockAlgo();
+		vTaskDelay(12);
+	}
+}
+/*=====================================*/
+
 
