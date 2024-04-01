@@ -1,0 +1,1727 @@
+
+Autosar_DoorLockIndecation.axf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         000008ec  08000130  08000130  00010130  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000008  08000a1c  08000a1c  00010a1c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08000a24  08000a24  00010a2c  2**0
+                  CONTENTS
+  4 .ARM          00000000  08000a24  08000a24  00010a2c  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08000a24  08000a2c  00010a2c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000a24  08000a24  00010a24  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08000a28  08000a28  00010a28  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  00010a2c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          000000b8  20000000  08000a2c  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  200000b8  08000a2c  000200b8  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  00010a2c  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   00007565  00000000  00000000  00010a55  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_abbrev 00001453  00000000  00000000  00017fba  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_aranges 000003c8  00000000  00000000  00019410  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 15 .debug_ranges 00000320  00000000  00000000  000197d8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_macro  000035ce  00000000  00000000  00019af8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_line   000046d0  00000000  00000000  0001d0c6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_str    00011985  00000000  00000000  00021796  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .comment      0000007b  00000000  00000000  0003311b  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  00000ce0  00000000  00000000  00033198  2**2
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	; (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	; (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	; (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	08000a04 	.word	0x08000a04
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	; (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	; (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	; (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	08000a04 	.word	0x08000a04
+
+08000170 <Dio_ReadChannel>:
+
+#include "DIO.h"
+
+
+Dio_LevelType Dio_ReadChannel (Dio_ChannelType ChannelId)
+{
+ 8000170:	b580      	push	{r7, lr}
+ 8000172:	b084      	sub	sp, #16
+ 8000174:	af00      	add	r7, sp, #0
+ 8000176:	4603      	mov	r3, r0
+ 8000178:	71fb      	strb	r3, [r7, #7]
+	Dio_LevelType ChannelVal = DIO_LEVEL_LOW;
+ 800017a:	2300      	movs	r3, #0
+ 800017c:	73fb      	strb	r3, [r7, #15]
+	ChannelVal = MCAL_GPIO_Read_Pin(GPIO_Port_Used, ChannelId);
+ 800017e:	79fb      	ldrb	r3, [r7, #7]
+ 8000180:	b29b      	uxth	r3, r3
+ 8000182:	4619      	mov	r1, r3
+ 8000184:	4804      	ldr	r0, [pc, #16]	; (8000198 <Dio_ReadChannel+0x28>)
+ 8000186:	f000 f8fd 	bl	8000384 <MCAL_GPIO_Read_Pin>
+ 800018a:	4603      	mov	r3, r0
+ 800018c:	73fb      	strb	r3, [r7, #15]
+	return ChannelVal;
+ 800018e:	7bfb      	ldrb	r3, [r7, #15]
+}
+ 8000190:	4618      	mov	r0, r3
+ 8000192:	3710      	adds	r7, #16
+ 8000194:	46bd      	mov	sp, r7
+ 8000196:	bd80      	pop	{r7, pc}
+ 8000198:	40010800 	.word	0x40010800
+
+0800019c <Dio_WriteChannel>:
+
+
+void Dio_WriteChannel(Dio_ChannelType ChannelId,Dio_LevelType Level)
+{
+ 800019c:	b580      	push	{r7, lr}
+ 800019e:	b082      	sub	sp, #8
+ 80001a0:	af00      	add	r7, sp, #0
+ 80001a2:	4603      	mov	r3, r0
+ 80001a4:	460a      	mov	r2, r1
+ 80001a6:	71fb      	strb	r3, [r7, #7]
+ 80001a8:	4613      	mov	r3, r2
+ 80001aa:	71bb      	strb	r3, [r7, #6]
+  MCAL_GPIO_WritePin(GPIOA, ChannelId, Level);
+ 80001ac:	79fb      	ldrb	r3, [r7, #7]
+ 80001ae:	b29b      	uxth	r3, r3
+ 80001b0:	79ba      	ldrb	r2, [r7, #6]
+ 80001b2:	4619      	mov	r1, r3
+ 80001b4:	4803      	ldr	r0, [pc, #12]	; (80001c4 <Dio_WriteChannel+0x28>)
+ 80001b6:	f000 f8fe 	bl	80003b6 <MCAL_GPIO_WritePin>
+}
+ 80001ba:	bf00      	nop
+ 80001bc:	3708      	adds	r7, #8
+ 80001be:	46bd      	mov	sp, r7
+ 80001c0:	bd80      	pop	{r7, pc}
+ 80001c2:	bf00      	nop
+ 80001c4:	40010800 	.word	0x40010800
+
+080001c8 <Get_CRLH_Postion>:
+
+#include "STM32F103C6_GPIO_DRIVERS.h"
+
+
+uint8_t Get_CRLH_Postion(uint16_t PinNumber)
+{
+ 80001c8:	b480      	push	{r7}
+ 80001ca:	b083      	sub	sp, #12
+ 80001cc:	af00      	add	r7, sp, #0
+ 80001ce:	4603      	mov	r3, r0
+ 80001d0:	80fb      	strh	r3, [r7, #6]
+	switch (PinNumber)
+ 80001d2:	88fb      	ldrh	r3, [r7, #6]
+ 80001d4:	2b80      	cmp	r3, #128	; 0x80
+ 80001d6:	d042      	beq.n	800025e <Get_CRLH_Postion+0x96>
+ 80001d8:	2b80      	cmp	r3, #128	; 0x80
+ 80001da:	dc11      	bgt.n	8000200 <Get_CRLH_Postion+0x38>
+ 80001dc:	2b08      	cmp	r3, #8
+ 80001de:	d036      	beq.n	800024e <Get_CRLH_Postion+0x86>
+ 80001e0:	2b08      	cmp	r3, #8
+ 80001e2:	dc06      	bgt.n	80001f2 <Get_CRLH_Postion+0x2a>
+ 80001e4:	2b02      	cmp	r3, #2
+ 80001e6:	d02e      	beq.n	8000246 <Get_CRLH_Postion+0x7e>
+ 80001e8:	2b04      	cmp	r3, #4
+ 80001ea:	d02e      	beq.n	800024a <Get_CRLH_Postion+0x82>
+ 80001ec:	2b01      	cmp	r3, #1
+ 80001ee:	d028      	beq.n	8000242 <Get_CRLH_Postion+0x7a>
+ 80001f0:	e047      	b.n	8000282 <Get_CRLH_Postion+0xba>
+ 80001f2:	2b20      	cmp	r3, #32
+ 80001f4:	d02f      	beq.n	8000256 <Get_CRLH_Postion+0x8e>
+ 80001f6:	2b40      	cmp	r3, #64	; 0x40
+ 80001f8:	d02f      	beq.n	800025a <Get_CRLH_Postion+0x92>
+ 80001fa:	2b10      	cmp	r3, #16
+ 80001fc:	d029      	beq.n	8000252 <Get_CRLH_Postion+0x8a>
+ 80001fe:	e040      	b.n	8000282 <Get_CRLH_Postion+0xba>
+ 8000200:	f5b3 6f00 	cmp.w	r3, #2048	; 0x800
+ 8000204:	d033      	beq.n	800026e <Get_CRLH_Postion+0xa6>
+ 8000206:	f5b3 6f00 	cmp.w	r3, #2048	; 0x800
+ 800020a:	dc09      	bgt.n	8000220 <Get_CRLH_Postion+0x58>
+ 800020c:	f5b3 7f00 	cmp.w	r3, #512	; 0x200
+ 8000210:	d029      	beq.n	8000266 <Get_CRLH_Postion+0x9e>
+ 8000212:	f5b3 6f80 	cmp.w	r3, #1024	; 0x400
+ 8000216:	d028      	beq.n	800026a <Get_CRLH_Postion+0xa2>
+ 8000218:	f5b3 7f80 	cmp.w	r3, #256	; 0x100
+ 800021c:	d021      	beq.n	8000262 <Get_CRLH_Postion+0x9a>
+ 800021e:	e030      	b.n	8000282 <Get_CRLH_Postion+0xba>
+ 8000220:	f5b3 5f00 	cmp.w	r3, #8192	; 0x2000
+ 8000224:	d027      	beq.n	8000276 <Get_CRLH_Postion+0xae>
+ 8000226:	f5b3 5f00 	cmp.w	r3, #8192	; 0x2000
+ 800022a:	dc03      	bgt.n	8000234 <Get_CRLH_Postion+0x6c>
+ 800022c:	f5b3 5f80 	cmp.w	r3, #4096	; 0x1000
+ 8000230:	d01f      	beq.n	8000272 <Get_CRLH_Postion+0xaa>
+ 8000232:	e026      	b.n	8000282 <Get_CRLH_Postion+0xba>
+ 8000234:	f5b3 4f80 	cmp.w	r3, #16384	; 0x4000
+ 8000238:	d01f      	beq.n	800027a <Get_CRLH_Postion+0xb2>
+ 800023a:	f5b3 4f00 	cmp.w	r3, #32768	; 0x8000
+ 800023e:	d01e      	beq.n	800027e <Get_CRLH_Postion+0xb6>
+ 8000240:	e01f      	b.n	8000282 <Get_CRLH_Postion+0xba>
+	{
+	case GPIO_PIN_0:
+		return 0;
+ 8000242:	2300      	movs	r3, #0
+ 8000244:	e01e      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_1:
+		return 4;
+ 8000246:	2304      	movs	r3, #4
+ 8000248:	e01c      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_2:
+		return 8;
+ 800024a:	2308      	movs	r3, #8
+ 800024c:	e01a      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_3:
+		return 12;
+ 800024e:	230c      	movs	r3, #12
+ 8000250:	e018      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_4:
+		return 16;
+ 8000252:	2310      	movs	r3, #16
+ 8000254:	e016      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_5:
+		return 20;
+ 8000256:	2314      	movs	r3, #20
+ 8000258:	e014      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_6:
+		return 24;
+ 800025a:	2318      	movs	r3, #24
+ 800025c:	e012      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_7:
+		return 28;
+ 800025e:	231c      	movs	r3, #28
+ 8000260:	e010      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_8:
+		return 0;
+ 8000262:	2300      	movs	r3, #0
+ 8000264:	e00e      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_9:
+		return 4;
+ 8000266:	2304      	movs	r3, #4
+ 8000268:	e00c      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_10:
+		return 8;
+ 800026a:	2308      	movs	r3, #8
+ 800026c:	e00a      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_11:
+		return 12;
+ 800026e:	230c      	movs	r3, #12
+ 8000270:	e008      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_12:
+		return 16;
+ 8000272:	2310      	movs	r3, #16
+ 8000274:	e006      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_13:
+		return 20;
+ 8000276:	2314      	movs	r3, #20
+ 8000278:	e004      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_14:
+		return 24;
+ 800027a:	2318      	movs	r3, #24
+ 800027c:	e002      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+
+	case GPIO_PIN_15:
+		return 28;
+ 800027e:	231c      	movs	r3, #28
+ 8000280:	e000      	b.n	8000284 <Get_CRLH_Postion+0xbc>
+		break;
+	default:
+		return 0;
+ 8000282:	2300      	movs	r3, #0
+		break;
+
+	}
+}
+ 8000284:	4618      	mov	r0, r3
+ 8000286:	370c      	adds	r7, #12
+ 8000288:	46bd      	mov	sp, r7
+ 800028a:	bc80      	pop	{r7}
+ 800028c:	4770      	bx	lr
+
+0800028e <MCAL_GPIO_Init>:
+ * note -                   -stmf103c6 MCU has GPIO A,B,C,D,E Modules
+ *                           but LQFP48 Package has only GPIO A,B, Part of C/D exported external pins
+ */
+/**================================================================= */
+void MCAL_GPIO_Init( GPIO_TypeDef *GPIOx , GPIO_Pin_Configure_t *Pin_Config )
+{
+ 800028e:	b590      	push	{r4, r7, lr}
+ 8000290:	b085      	sub	sp, #20
+ 8000292:	af00      	add	r7, sp, #0
+ 8000294:	6078      	str	r0, [r7, #4]
+ 8000296:	6039      	str	r1, [r7, #0]
+
+	//To Init Any Pins Must Write On Port configuration register low (GPIOx_CRL) 0>>>7
+	//Or register low (GPIOx_CRH) 8>>>15
+	//We Determine The Position Should Write On It In  configuration register By Determine First Position Pin
+
+	volatile uint32_t *ConfigureRegister = NULL;
+ 8000298:	2300      	movs	r3, #0
+ 800029a:	60bb      	str	r3, [r7, #8]
+	uint8_t   ConfigurePin=0;     //In This Variable We Store The Configure Pin
+ 800029c:	2300      	movs	r3, #0
+ 800029e:	73fb      	strb	r3, [r7, #15]
+
+	ConfigureRegister = (Pin_Config->GPIO_Pin_Number < GPIO_PIN_8)? &GPIOx->CRL : &GPIOx->CRH ;
+ 80002a0:	683b      	ldr	r3, [r7, #0]
+ 80002a2:	881b      	ldrh	r3, [r3, #0]
+ 80002a4:	2bff      	cmp	r3, #255	; 0xff
+ 80002a6:	d801      	bhi.n	80002ac <MCAL_GPIO_Init+0x1e>
+ 80002a8:	687b      	ldr	r3, [r7, #4]
+ 80002aa:	e001      	b.n	80002b0 <MCAL_GPIO_Init+0x22>
+ 80002ac:	687b      	ldr	r3, [r7, #4]
+ 80002ae:	3304      	adds	r3, #4
+ 80002b0:	60bb      	str	r3, [r7, #8]
+	//Clear CNF & MODE
+	*(ConfigureRegister) &=~(0xf<<Get_CRLH_Postion(Pin_Config->GPIO_Pin_Number));
+ 80002b2:	683b      	ldr	r3, [r7, #0]
+ 80002b4:	881b      	ldrh	r3, [r3, #0]
+ 80002b6:	4618      	mov	r0, r3
+ 80002b8:	f7ff ff86 	bl	80001c8 <Get_CRLH_Postion>
+ 80002bc:	4603      	mov	r3, r0
+ 80002be:	461a      	mov	r2, r3
+ 80002c0:	230f      	movs	r3, #15
+ 80002c2:	4093      	lsls	r3, r2
+ 80002c4:	43da      	mvns	r2, r3
+ 80002c6:	68bb      	ldr	r3, [r7, #8]
+ 80002c8:	681b      	ldr	r3, [r3, #0]
+ 80002ca:	401a      	ands	r2, r3
+ 80002cc:	68bb      	ldr	r3, [r7, #8]
+ 80002ce:	601a      	str	r2, [r3, #0]
+
+	if (Pin_Config->GPIO_MODE == GPIO_MODE_OUTPUT_AF_OD || Pin_Config->GPIO_MODE ==GPIO_MODE_OUTPUT_AF_PP || Pin_Config->GPIO_MODE ==GPIO_MODE_OUTPUT_OD || Pin_Config->GPIO_MODE ==GPIO_MODE_OUTPUT_PP)
+ 80002d0:	683b      	ldr	r3, [r7, #0]
+ 80002d2:	789b      	ldrb	r3, [r3, #2]
+ 80002d4:	2b07      	cmp	r3, #7
+ 80002d6:	d00b      	beq.n	80002f0 <MCAL_GPIO_Init+0x62>
+ 80002d8:	683b      	ldr	r3, [r7, #0]
+ 80002da:	789b      	ldrb	r3, [r3, #2]
+ 80002dc:	2b06      	cmp	r3, #6
+ 80002de:	d007      	beq.n	80002f0 <MCAL_GPIO_Init+0x62>
+ 80002e0:	683b      	ldr	r3, [r7, #0]
+ 80002e2:	789b      	ldrb	r3, [r3, #2]
+ 80002e4:	2b05      	cmp	r3, #5
+ 80002e6:	d003      	beq.n	80002f0 <MCAL_GPIO_Init+0x62>
+ 80002e8:	683b      	ldr	r3, [r7, #0]
+ 80002ea:	789b      	ldrb	r3, [r3, #2]
+ 80002ec:	2b04      	cmp	r3, #4
+ 80002ee:	d10e      	bne.n	800030e <MCAL_GPIO_Init+0x80>
+	{
+
+		//I sure The User Want Make The Pin As Output & in Case Output Should Configure Mode(Speed) & CNF(State)
+		ConfigurePin = ((( (Pin_Config->GPIO_MODE - 4)<<2) |(Pin_Config->GPIO_OUTPUT_SPEED)) & 0x0f); //Shift 2 to Set The CNF Bits
+ 80002f0:	683b      	ldr	r3, [r7, #0]
+ 80002f2:	789b      	ldrb	r3, [r3, #2]
+ 80002f4:	3b04      	subs	r3, #4
+ 80002f6:	009b      	lsls	r3, r3, #2
+ 80002f8:	b25a      	sxtb	r2, r3
+ 80002fa:	683b      	ldr	r3, [r7, #0]
+ 80002fc:	78db      	ldrb	r3, [r3, #3]
+ 80002fe:	b25b      	sxtb	r3, r3
+ 8000300:	4313      	orrs	r3, r2
+ 8000302:	b25b      	sxtb	r3, r3
+ 8000304:	b2db      	uxtb	r3, r3
+ 8000306:	f003 030f 	and.w	r3, r3, #15
+ 800030a:	73fb      	strb	r3, [r7, #15]
+ 800030c:	e028      	b.n	8000360 <MCAL_GPIO_Init+0xd2>
+
+	}
+
+	else  //I sure The User Want Make The Pin As Input & in Case input Should Configure Mode(Speed)=00 & CNF(State)
+	{
+		if(Pin_Config->GPIO_MODE == GPIO_MODE_INPUT_FLO || GPIO_MODE_Analog)
+ 800030e:	683b      	ldr	r3, [r7, #0]
+ 8000310:	789b      	ldrb	r3, [r3, #2]
+ 8000312:	2b01      	cmp	r3, #1
+ 8000314:	d107      	bne.n	8000326 <MCAL_GPIO_Init+0x98>
+		{
+			ConfigurePin = (( ( (Pin_Config->GPIO_MODE) <<2) | 0x0) & 0x0F);      //Shift 2 to Set The CNF Bits
+ 8000316:	683b      	ldr	r3, [r7, #0]
+ 8000318:	789b      	ldrb	r3, [r3, #2]
+ 800031a:	009b      	lsls	r3, r3, #2
+ 800031c:	b2db      	uxtb	r3, r3
+ 800031e:	f003 030f 	and.w	r3, r3, #15
+ 8000322:	73fb      	strb	r3, [r7, #15]
+ 8000324:	e01c      	b.n	8000360 <MCAL_GPIO_Init+0xd2>
+		}
+
+		else if(Pin_Config->GPIO_MODE == GPIO_MODE_AF_INPUT)
+ 8000326:	683b      	ldr	r3, [r7, #0]
+ 8000328:	789b      	ldrb	r3, [r3, #2]
+ 800032a:	2b08      	cmp	r3, #8
+ 800032c:	d102      	bne.n	8000334 <MCAL_GPIO_Init+0xa6>
+		{
+			ConfigurePin = (( ( (GPIO_MODE_INPUT_FLO) <<2) | 0x0) & 0x0f);      //Shift 2 to Set The CNF Bits
+ 800032e:	2304      	movs	r3, #4
+ 8000330:	73fb      	strb	r3, [r7, #15]
+ 8000332:	e015      	b.n	8000360 <MCAL_GPIO_Init+0xd2>
+		}
+		else  //PullUp Or PullDown
+		{
+			ConfigurePin = ( (((GPIO_MODE_INPUT_PU)<<2  ) |  0x0) & 0x0f);
+ 8000334:	2308      	movs	r3, #8
+ 8000336:	73fb      	strb	r3, [r7, #15]
+			// 20. Port bit configuration table
+			/*In Case GPIO_MODE_INPUT_PU OR GPIO_MODE_INPUT_PD We Put The Same Value 10 In CNF
+			And Go To ODR IF GPIO_MODE_INPUT_PU Put 1 And If GPIO_MODE_INPUT_PD Put In ODR 0 Shifting By Bin Number*/
+			if(Pin_Config->GPIO_MODE == GPIO_MODE_INPUT_PU)
+ 8000338:	683b      	ldr	r3, [r7, #0]
+ 800033a:	789b      	ldrb	r3, [r3, #2]
+ 800033c:	2b02      	cmp	r3, #2
+ 800033e:	d107      	bne.n	8000350 <MCAL_GPIO_Init+0xc2>
+			{
+				GPIOx->ODR |=(Pin_Config->GPIO_Pin_Number); //Not Making Shifting because The Pin Number Already Shifted in Header
+ 8000340:	687b      	ldr	r3, [r7, #4]
+ 8000342:	68db      	ldr	r3, [r3, #12]
+ 8000344:	683a      	ldr	r2, [r7, #0]
+ 8000346:	8812      	ldrh	r2, [r2, #0]
+ 8000348:	431a      	orrs	r2, r3
+ 800034a:	687b      	ldr	r3, [r7, #4]
+ 800034c:	60da      	str	r2, [r3, #12]
+ 800034e:	e007      	b.n	8000360 <MCAL_GPIO_Init+0xd2>
+			}
+			else //GPIO_MODE_INPUT_PD
+			{
+				GPIOx->ODR &=~(Pin_Config->GPIO_Pin_Number);//Not Making Shifting because The Pin Number Already Shifted in Header
+ 8000350:	687b      	ldr	r3, [r7, #4]
+ 8000352:	68db      	ldr	r3, [r3, #12]
+ 8000354:	683a      	ldr	r2, [r7, #0]
+ 8000356:	8812      	ldrh	r2, [r2, #0]
+ 8000358:	43d2      	mvns	r2, r2
+ 800035a:	401a      	ands	r2, r3
+ 800035c:	687b      	ldr	r3, [r7, #4]
+ 800035e:	60da      	str	r2, [r3, #12]
+			}
+		}
+	}
+	//Write On CRH Or CLH
+	*(ConfigureRegister) |=( ConfigurePin << Get_CRLH_Postion(Pin_Config->GPIO_Pin_Number) );
+ 8000360:	7bfc      	ldrb	r4, [r7, #15]
+ 8000362:	683b      	ldr	r3, [r7, #0]
+ 8000364:	881b      	ldrh	r3, [r3, #0]
+ 8000366:	4618      	mov	r0, r3
+ 8000368:	f7ff ff2e 	bl	80001c8 <Get_CRLH_Postion>
+ 800036c:	4603      	mov	r3, r0
+ 800036e:	fa04 f203 	lsl.w	r2, r4, r3
+ 8000372:	68bb      	ldr	r3, [r7, #8]
+ 8000374:	681b      	ldr	r3, [r3, #0]
+ 8000376:	431a      	orrs	r2, r3
+ 8000378:	68bb      	ldr	r3, [r7, #8]
+ 800037a:	601a      	str	r2, [r3, #0]
+}
+ 800037c:	bf00      	nop
+ 800037e:	3714      	adds	r7, #20
+ 8000380:	46bd      	mov	sp, r7
+ 8000382:	bd90      	pop	{r4, r7, pc}
+
+08000384 <MCAL_GPIO_Read_Pin>:
+ * @retval -                -the input pin value (tow values based on @ref GPIO_PIN_State)
+ * note -                   -none
+ */
+/**================================================================= */
+uint8_t MCAL_GPIO_Read_Pin( GPIO_TypeDef *GPIOx , uint16_t Pin_Number )
+{
+ 8000384:	b480      	push	{r7}
+ 8000386:	b085      	sub	sp, #20
+ 8000388:	af00      	add	r7, sp, #0
+ 800038a:	6078      	str	r0, [r7, #4]
+ 800038c:	460b      	mov	r3, r1
+ 800038e:	807b      	strh	r3, [r7, #2]
+
+	uint8_t PinState =0;
+ 8000390:	2300      	movs	r3, #0
+ 8000392:	73fb      	strb	r3, [r7, #15]
+	if( (GPIOx->IDR & Pin_Number) != (uint32_t)GPIO_PIN_FALSE )
+ 8000394:	687b      	ldr	r3, [r7, #4]
+ 8000396:	689a      	ldr	r2, [r3, #8]
+ 8000398:	887b      	ldrh	r3, [r7, #2]
+ 800039a:	4013      	ands	r3, r2
+ 800039c:	2b00      	cmp	r3, #0
+ 800039e:	d002      	beq.n	80003a6 <MCAL_GPIO_Read_Pin+0x22>
+	{
+		PinState = GPIO_PIN_TRUE;
+ 80003a0:	2301      	movs	r3, #1
+ 80003a2:	73fb      	strb	r3, [r7, #15]
+ 80003a4:	e001      	b.n	80003aa <MCAL_GPIO_Read_Pin+0x26>
+	}
+	else
+	{
+		PinState = GPIO_PIN_FALSE;
+ 80003a6:	2300      	movs	r3, #0
+ 80003a8:	73fb      	strb	r3, [r7, #15]
+	}
+	return PinState;
+ 80003aa:	7bfb      	ldrb	r3, [r7, #15]
+
+}
+ 80003ac:	4618      	mov	r0, r3
+ 80003ae:	3714      	adds	r7, #20
+ 80003b0:	46bd      	mov	sp, r7
+ 80003b2:	bc80      	pop	{r7}
+ 80003b4:	4770      	bx	lr
+
+080003b6 <MCAL_GPIO_WritePin>:
+ * @retval -                -the input pin value (tow values based on @ref GPIO_PIN_State)
+ * note -                   -none
+ */
+/**================================================================= */
+void MCAL_GPIO_WritePin(GPIO_TypeDef *GPIOx , uint16_t Pin_Number , uint8_t Value)
+{
+ 80003b6:	b480      	push	{r7}
+ 80003b8:	b083      	sub	sp, #12
+ 80003ba:	af00      	add	r7, sp, #0
+ 80003bc:	6078      	str	r0, [r7, #4]
+ 80003be:	460b      	mov	r3, r1
+ 80003c0:	807b      	strh	r3, [r7, #2]
+ 80003c2:	4613      	mov	r3, r2
+ 80003c4:	707b      	strb	r3, [r7, #1]
+	if(Value != GPIO_PIN_FALSE )
+ 80003c6:	787b      	ldrb	r3, [r7, #1]
+ 80003c8:	2b00      	cmp	r3, #0
+ 80003ca:	d006      	beq.n	80003da <MCAL_GPIO_WritePin+0x24>
+	{
+		GPIOx->ODR |=(uint32_t) (Pin_Number);
+ 80003cc:	687b      	ldr	r3, [r7, #4]
+ 80003ce:	68da      	ldr	r2, [r3, #12]
+ 80003d0:	887b      	ldrh	r3, [r7, #2]
+ 80003d2:	431a      	orrs	r2, r3
+ 80003d4:	687b      	ldr	r3, [r7, #4]
+ 80003d6:	60da      	str	r2, [r3, #12]
+	}
+	else
+	{
+		GPIOx->ODR &=~(uint32_t)(Pin_Number);
+	}
+}
+ 80003d8:	e006      	b.n	80003e8 <MCAL_GPIO_WritePin+0x32>
+		GPIOx->ODR &=~(uint32_t)(Pin_Number);
+ 80003da:	687b      	ldr	r3, [r7, #4]
+ 80003dc:	68da      	ldr	r2, [r3, #12]
+ 80003de:	887b      	ldrh	r3, [r7, #2]
+ 80003e0:	43db      	mvns	r3, r3
+ 80003e2:	401a      	ands	r2, r3
+ 80003e4:	687b      	ldr	r3, [r7, #4]
+ 80003e6:	60da      	str	r2, [r3, #12]
+}
+ 80003e8:	bf00      	nop
+ 80003ea:	370c      	adds	r7, #12
+ 80003ec:	46bd      	mov	sp, r7
+ 80003ee:	bc80      	pop	{r7}
+ 80003f0:	4770      	bx	lr
+	...
+
+080003f4 <Timer2_init>:
+//we need move the delay function from timer2 to timer1 to relase timer2 for RTOS
+/*==============================APIs================================*/
+
+/*========================Timer2 For Delay========================*/
+void Timer2_init(void)//for delay
+{
+ 80003f4:	b480      	push	{r7}
+ 80003f6:	af00      	add	r7, sp, #0
+	RCC_APB1ENR |=(1<<0);     //Enable Rcc for tim2
+ 80003f8:	4b0e      	ldr	r3, [pc, #56]	; (8000434 <Timer2_init+0x40>)
+ 80003fa:	681b      	ldr	r3, [r3, #0]
+ 80003fc:	4a0d      	ldr	r2, [pc, #52]	; (8000434 <Timer2_init+0x40>)
+ 80003fe:	f043 0301 	orr.w	r3, r3, #1
+ 8000402:	6013      	str	r3, [r2, #0]
+	TIM2_PSC = 7;             //Clk_input=(8M/(7+1))=1MHZ
+ 8000404:	4b0c      	ldr	r3, [pc, #48]	; (8000438 <Timer2_init+0x44>)
+ 8000406:	2207      	movs	r2, #7
+ 8000408:	601a      	str	r2, [r3, #0]
+	TIM2_ARR = 0xFFFF;        //to make interrupt after 50000 tike(50000*10^-6)=0.05-->20*0.05=1
+ 800040a:	4b0c      	ldr	r3, [pc, #48]	; (800043c <Timer2_init+0x48>)
+ 800040c:	f64f 72ff 	movw	r2, #65535	; 0xffff
+ 8000410:	601a      	str	r2, [r3, #0]
+	TIM2_CR1 |=(1<<0);
+ 8000412:	f04f 4380 	mov.w	r3, #1073741824	; 0x40000000
+ 8000416:	681b      	ldr	r3, [r3, #0]
+ 8000418:	f04f 4280 	mov.w	r2, #1073741824	; 0x40000000
+ 800041c:	f043 0301 	orr.w	r3, r3, #1
+ 8000420:	6013      	str	r3, [r2, #0]
+	while(!(TIM2_SR)&(1<<0));
+ 8000422:	bf00      	nop
+ 8000424:	4b06      	ldr	r3, [pc, #24]	; (8000440 <Timer2_init+0x4c>)
+ 8000426:	681b      	ldr	r3, [r3, #0]
+ 8000428:	2b00      	cmp	r3, #0
+ 800042a:	d0fb      	beq.n	8000424 <Timer2_init+0x30>
+}
+ 800042c:	bf00      	nop
+ 800042e:	46bd      	mov	sp, r7
+ 8000430:	bc80      	pop	{r7}
+ 8000432:	4770      	bx	lr
+ 8000434:	4002101c 	.word	0x4002101c
+ 8000438:	40000028 	.word	0x40000028
+ 800043c:	4000002c 	.word	0x4000002c
+ 8000440:	40000010 	.word	0x40000010
+
+08000444 <Rte_IWrite_SWC1_DoorLockIndecation_Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState>:
+
+
+
+
+void Rte_IWrite_SWC1_DoorLockIndecation_Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState (myuint8 DoorState)
+{
+ 8000444:	b480      	push	{r7}
+ 8000446:	b083      	sub	sp, #12
+ 8000448:	af00      	add	r7, sp, #0
+ 800044a:	4603      	mov	r3, r0
+ 800044c:	71fb      	strb	r3, [r7, #7]
+	(Rte_Inst_SWC1_DoorLockIndecation)->Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState->value = DoorState;
+ 800044e:	4b04      	ldr	r3, [pc, #16]	; (8000460 <Rte_IWrite_SWC1_DoorLockIndecation_Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState+0x1c>)
+ 8000450:	681b      	ldr	r3, [r3, #0]
+ 8000452:	79fa      	ldrb	r2, [r7, #7]
+ 8000454:	701a      	strb	r2, [r3, #0]
+}
+ 8000456:	bf00      	nop
+ 8000458:	370c      	adds	r7, #12
+ 800045a:	46bd      	mov	sp, r7
+ 800045c:	bc80      	pop	{r7}
+ 800045e:	4770      	bx	lr
+ 8000460:	08000a1c 	.word	0x08000a1c
+
+08000464 <Rte_IRead_SWC2_DoorLockIndecationAlgo_Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState>:
+Std_ReturnType SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led_Buffer_retcode = RTE_E_OK;
+
+FunctionPtr_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led_Delegate = 0;
+
+myuint8 Rte_IRead_SWC2_DoorLockIndecationAlgo_Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState (void)
+{
+ 8000464:	b480      	push	{r7}
+ 8000466:	af00      	add	r7, sp, #0
+	return (Rte_Inst_SWC2_DoorLockIndecationAlgo)->Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState->value;
+ 8000468:	4b03      	ldr	r3, [pc, #12]	; (8000478 <Rte_IRead_SWC2_DoorLockIndecationAlgo_Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState+0x14>)
+ 800046a:	681b      	ldr	r3, [r3, #0]
+ 800046c:	781b      	ldrb	r3, [r3, #0]
+}
+ 800046e:	4618      	mov	r0, r3
+ 8000470:	46bd      	mov	sp, r7
+ 8000472:	bc80      	pop	{r7}
+ 8000474:	4770      	bx	lr
+ 8000476:	bf00      	nop
+ 8000478:	08000a20 	.word	0x08000a20
+
+0800047c <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led>:
+Std_ReturnType Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led (myuint8 LedState)
+{
+ 800047c:	b580      	push	{r7, lr}
+ 800047e:	b084      	sub	sp, #16
+ 8000480:	af00      	add	r7, sp, #0
+ 8000482:	4603      	mov	r3, r0
+ 8000484:	71fb      	strb	r3, [r7, #7]
+	Std_ReturnType __result = SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led_Buffer_retcode;
+ 8000486:	4b0b      	ldr	r3, [pc, #44]	; (80004b4 <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led+0x38>)
+ 8000488:	781b      	ldrb	r3, [r3, #0]
+ 800048a:	73fb      	strb	r3, [r7, #15]
+	if ( Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led_Delegate != 0 ) {
+ 800048c:	4b0a      	ldr	r3, [pc, #40]	; (80004b8 <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led+0x3c>)
+ 800048e:	681b      	ldr	r3, [r3, #0]
+ 8000490:	2b00      	cmp	r3, #0
+ 8000492:	d006      	beq.n	80004a2 <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led+0x26>
+		__result = Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led_Delegate(LedState);
+ 8000494:	4b08      	ldr	r3, [pc, #32]	; (80004b8 <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led+0x3c>)
+ 8000496:	681b      	ldr	r3, [r3, #0]
+ 8000498:	79fa      	ldrb	r2, [r7, #7]
+ 800049a:	4610      	mov	r0, r2
+ 800049c:	4798      	blx	r3
+ 800049e:	4603      	mov	r3, r0
+ 80004a0:	73fb      	strb	r3, [r7, #15]
+	}
+	//Sync. Implementation to call direct Run_led
+	Run_Led(LedState);
+ 80004a2:	79fb      	ldrb	r3, [r7, #7]
+ 80004a4:	4618      	mov	r0, r3
+ 80004a6:	f000 f81b 	bl	80004e0 <Run_Led>
+	return __result;
+ 80004aa:	7bfb      	ldrb	r3, [r7, #15]
+}
+ 80004ac:	4618      	mov	r0, r3
+ 80004ae:	3710      	adds	r7, #16
+ 80004b0:	46bd      	mov	sp, r7
+ 80004b2:	bd80      	pop	{r7, pc}
+ 80004b4:	2000001c 	.word	0x2000001c
+ 80004b8:	20000020 	.word	0x20000020
+
+080004bc <Run_ReadDoorSensor>:
+extern Rte_DE_myuint8 Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState;
+
+
+
+void Run_ReadDoorSensor(void)
+{
+ 80004bc:	b580      	push	{r7, lr}
+ 80004be:	b082      	sub	sp, #8
+ 80004c0:	af00      	add	r7, sp, #0
+	Dio_LevelType DoorState = DIO_LEVEL_LOW;
+ 80004c2:	2300      	movs	r3, #0
+ 80004c4:	71fb      	strb	r3, [r7, #7]
+	DoorState = Dio_ReadChannel(DIO_Door);
+ 80004c6:	2008      	movs	r0, #8
+ 80004c8:	f7ff fe52 	bl	8000170 <Dio_ReadChannel>
+ 80004cc:	4603      	mov	r3, r0
+ 80004ce:	71fb      	strb	r3, [r7, #7]
+	Rte_IWrite_SWC1_DoorLockIndecation_Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState(DoorState);
+ 80004d0:	79fb      	ldrb	r3, [r7, #7]
+ 80004d2:	4618      	mov	r0, r3
+ 80004d4:	f7ff ffb6 	bl	8000444 <Rte_IWrite_SWC1_DoorLockIndecation_Run_ReadDoorSensor_ProvPort_SendRec_DoorState_DoorState>
+}
+ 80004d8:	bf00      	nop
+ 80004da:	3708      	adds	r7, #8
+ 80004dc:	46bd      	mov	sp, r7
+ 80004de:	bd80      	pop	{r7, pc}
+
+080004e0 <Run_Led>:
+
+Std_ReturnType Run_Led(myuint8 LedState)
+{
+ 80004e0:	b580      	push	{r7, lr}
+ 80004e2:	b082      	sub	sp, #8
+ 80004e4:	af00      	add	r7, sp, #0
+ 80004e6:	4603      	mov	r3, r0
+ 80004e8:	71fb      	strb	r3, [r7, #7]
+	if(LedState == DIO_LEVEL_LOW)
+ 80004ea:	79fb      	ldrb	r3, [r7, #7]
+ 80004ec:	2b00      	cmp	r3, #0
+ 80004ee:	d105      	bne.n	80004fc <Run_Led+0x1c>
+	{
+		Dio_WriteChannel(DIO_Led, DIO_LEVEL_LOW);
+ 80004f0:	2100      	movs	r1, #0
+ 80004f2:	2080      	movs	r0, #128	; 0x80
+ 80004f4:	f7ff fe52 	bl	800019c <Dio_WriteChannel>
+		return E_OK;
+ 80004f8:	2300      	movs	r3, #0
+ 80004fa:	e009      	b.n	8000510 <Run_Led+0x30>
+	}
+	else if(LedState == DIO_LEVEL_HIGH)
+ 80004fc:	79fb      	ldrb	r3, [r7, #7]
+ 80004fe:	2b01      	cmp	r3, #1
+ 8000500:	d105      	bne.n	800050e <Run_Led+0x2e>
+	{
+		Dio_WriteChannel(DIO_Led, DIO_LEVEL_HIGH);
+ 8000502:	2101      	movs	r1, #1
+ 8000504:	2080      	movs	r0, #128	; 0x80
+ 8000506:	f7ff fe49 	bl	800019c <Dio_WriteChannel>
+		return E_OK;
+ 800050a:	2300      	movs	r3, #0
+ 800050c:	e000      	b.n	8000510 <Run_Led+0x30>
+	}
+
+	return E_NOT_OK;
+ 800050e:	2301      	movs	r3, #1
+}
+ 8000510:	4618      	mov	r0, r3
+ 8000512:	3708      	adds	r7, #8
+ 8000514:	46bd      	mov	sp, r7
+ 8000516:	bd80      	pop	{r7, pc}
+
+08000518 <Run_DoorLockAlgo>:
+#include "Rte_SWC2_DoorLockIndecationAlgo.h"
+#include "DIO.h"
+
+
+void Run_DoorLockAlgo(void)
+{
+ 8000518:	b580      	push	{r7, lr}
+ 800051a:	b082      	sub	sp, #8
+ 800051c:	af00      	add	r7, sp, #0
+	Dio_LevelType DoorState = DIO_LEVEL_LOW;
+ 800051e:	2300      	movs	r3, #0
+ 8000520:	71fb      	strb	r3, [r7, #7]
+	//Read DoorState from RTE sender receiver interface
+	DoorState=Rte_IRead_SWC2_DoorLockIndecationAlgo_Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState();
+ 8000522:	f7ff ff9f 	bl	8000464 <Rte_IRead_SWC2_DoorLockIndecationAlgo_Run_DoorLockAlgo_ReqPort_SendRec_DoorState_DoorState>
+ 8000526:	4603      	mov	r3, r0
+ 8000528:	71fb      	strb	r3, [r7, #7]
+
+	if(DoorState == DIO_LEVEL_HIGH)
+ 800052a:	79fb      	ldrb	r3, [r7, #7]
+ 800052c:	2b01      	cmp	r3, #1
+ 800052e:	d103      	bne.n	8000538 <Run_DoorLockAlgo+0x20>
+	{
+		//door is open
+		Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led(DIO_LEVEL_LOW);//active low
+ 8000530:	2000      	movs	r0, #0
+ 8000532:	f7ff ffa3 	bl	800047c <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led>
+	else
+	{
+		//door is closed
+		Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led(DIO_LEVEL_HIGH);//active high
+	}
+}
+ 8000536:	e002      	b.n	800053e <Run_DoorLockAlgo+0x26>
+		Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led(DIO_LEVEL_HIGH);//active high
+ 8000538:	2001      	movs	r0, #1
+ 800053a:	f7ff ff9f 	bl	800047c <Rte_Call_SWC2_DoorLockIndecationAlgo_ReqPort_ClServInterface_Led_Led>
+}
+ 800053e:	bf00      	nop
+ 8000540:	3708      	adds	r7, #8
+ 8000542:	46bd      	mov	sp, r7
+ 8000544:	bd80      	pop	{r7, pc}
+	...
+
+08000548 <xTaskIncrementTick>:
+
+#endif /* INCLUDE_xTaskAbortDelay */
+/*----------------------------------------------------------*/
+
+BaseType_t xTaskIncrementTick( void )
+{
+ 8000548:	b580      	push	{r7, lr}
+ 800054a:	b088      	sub	sp, #32
+ 800054c:	af00      	add	r7, sp, #0
+    TCB_t * pxTCB;
+    TickType_t xItemValue;
+    BaseType_t xSwitchRequired = pdFALSE;
+ 800054e:	2300      	movs	r3, #0
+ 8000550:	61fb      	str	r3, [r7, #28]
+    /* Called by the portable layer each time a tick interrupt occurs.
+     * Increments the tick then checks to see if the new tick value will cause any
+     * tasks to be unblocked. */
+    traceTASK_INCREMENT_TICK( xTickCount );
+
+    if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+ 8000552:	4b75      	ldr	r3, [pc, #468]	; (8000728 <xTaskIncrementTick+0x1e0>)
+ 8000554:	681b      	ldr	r3, [r3, #0]
+ 8000556:	2b00      	cmp	r3, #0
+ 8000558:	f040 80dc 	bne.w	8000714 <xTaskIncrementTick+0x1cc>
+    {
+        /* Minor optimisation.  The tick count cannot change in this
+         * block. */
+        const TickType_t xConstTickCount = xTickCount + ( TickType_t ) 1;
+ 800055c:	4b73      	ldr	r3, [pc, #460]	; (800072c <xTaskIncrementTick+0x1e4>)
+ 800055e:	681b      	ldr	r3, [r3, #0]
+ 8000560:	3301      	adds	r3, #1
+ 8000562:	61bb      	str	r3, [r7, #24]
+
+        /* Increment the RTOS tick, switching the delayed and overflowed
+         * delayed lists if it wraps to 0. */
+        xTickCount = xConstTickCount;
+ 8000564:	4a71      	ldr	r2, [pc, #452]	; (800072c <xTaskIncrementTick+0x1e4>)
+ 8000566:	69bb      	ldr	r3, [r7, #24]
+ 8000568:	6013      	str	r3, [r2, #0]
+
+        if( xConstTickCount == ( TickType_t ) 0U ) /*lint !e774 'if' does not always evaluate to false as it is looking for an overflow. */
+ 800056a:	69bb      	ldr	r3, [r7, #24]
+ 800056c:	2b00      	cmp	r3, #0
+ 800056e:	d110      	bne.n	8000592 <xTaskIncrementTick+0x4a>
+        {
+            taskSWITCH_DELAYED_LISTS();
+ 8000570:	4b6f      	ldr	r3, [pc, #444]	; (8000730 <xTaskIncrementTick+0x1e8>)
+ 8000572:	681b      	ldr	r3, [r3, #0]
+ 8000574:	617b      	str	r3, [r7, #20]
+ 8000576:	4b6f      	ldr	r3, [pc, #444]	; (8000734 <xTaskIncrementTick+0x1ec>)
+ 8000578:	681b      	ldr	r3, [r3, #0]
+ 800057a:	4a6d      	ldr	r2, [pc, #436]	; (8000730 <xTaskIncrementTick+0x1e8>)
+ 800057c:	6013      	str	r3, [r2, #0]
+ 800057e:	4a6d      	ldr	r2, [pc, #436]	; (8000734 <xTaskIncrementTick+0x1ec>)
+ 8000580:	697b      	ldr	r3, [r7, #20]
+ 8000582:	6013      	str	r3, [r2, #0]
+ 8000584:	4b6c      	ldr	r3, [pc, #432]	; (8000738 <xTaskIncrementTick+0x1f0>)
+ 8000586:	681b      	ldr	r3, [r3, #0]
+ 8000588:	3301      	adds	r3, #1
+ 800058a:	4a6b      	ldr	r2, [pc, #428]	; (8000738 <xTaskIncrementTick+0x1f0>)
+ 800058c:	6013      	str	r3, [r2, #0]
+ 800058e:	f000 f927 	bl	80007e0 <prvResetNextTaskUnblockTime>
+
+        /* See if this tick has made a timeout expire.  Tasks are stored in
+         * the  queue in the order of their wake time - meaning once one task
+         * has been found whose block time has not expired there is no need to
+         * look any further down the list. */
+        if( xConstTickCount >= xNextTaskUnblockTime )
+ 8000592:	4b6a      	ldr	r3, [pc, #424]	; (800073c <xTaskIncrementTick+0x1f4>)
+ 8000594:	681b      	ldr	r3, [r3, #0]
+ 8000596:	69ba      	ldr	r2, [r7, #24]
+ 8000598:	429a      	cmp	r2, r3
+ 800059a:	f0c0 80a6 	bcc.w	80006ea <xTaskIncrementTick+0x1a2>
+        {
+            for( ; ; )
+            {
+                if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+ 800059e:	4b64      	ldr	r3, [pc, #400]	; (8000730 <xTaskIncrementTick+0x1e8>)
+ 80005a0:	681b      	ldr	r3, [r3, #0]
+ 80005a2:	681b      	ldr	r3, [r3, #0]
+ 80005a4:	2b00      	cmp	r3, #0
+ 80005a6:	d104      	bne.n	80005b2 <xTaskIncrementTick+0x6a>
+                    /* The delayed list is empty.  Set xNextTaskUnblockTime
+                     * to the maximum possible value so it is extremely
+                     * unlikely that the
+                     * if( xTickCount >= xNextTaskUnblockTime ) test will pass
+                     * next time through. */
+                    xNextTaskUnblockTime = portMAX_DELAY; /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+ 80005a8:	4b64      	ldr	r3, [pc, #400]	; (800073c <xTaskIncrementTick+0x1f4>)
+ 80005aa:	f04f 32ff 	mov.w	r2, #4294967295
+ 80005ae:	601a      	str	r2, [r3, #0]
+                    break;
+ 80005b0:	e09b      	b.n	80006ea <xTaskIncrementTick+0x1a2>
+                {
+                    /* The delayed list is not empty, get the value of the
+                     * item at the head of the delayed list.  This is the time
+                     * at which the task at the head of the delayed list must
+                     * be removed from the Blocked state. */
+                    pxTCB = listGET_OWNER_OF_HEAD_ENTRY( pxDelayedTaskList ); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+ 80005b2:	4b5f      	ldr	r3, [pc, #380]	; (8000730 <xTaskIncrementTick+0x1e8>)
+ 80005b4:	681b      	ldr	r3, [r3, #0]
+ 80005b6:	68db      	ldr	r3, [r3, #12]
+ 80005b8:	68db      	ldr	r3, [r3, #12]
+ 80005ba:	613b      	str	r3, [r7, #16]
+                    xItemValue = listGET_LIST_ITEM_VALUE( &( pxTCB->xStateListItem ) );
+ 80005bc:	693b      	ldr	r3, [r7, #16]
+ 80005be:	685b      	ldr	r3, [r3, #4]
+ 80005c0:	60fb      	str	r3, [r7, #12]
+
+                    if( xConstTickCount < xItemValue )
+ 80005c2:	69ba      	ldr	r2, [r7, #24]
+ 80005c4:	68fb      	ldr	r3, [r7, #12]
+ 80005c6:	429a      	cmp	r2, r3
+ 80005c8:	d203      	bcs.n	80005d2 <xTaskIncrementTick+0x8a>
+                        /* It is not time to unblock this item yet, but the
+                         * item value is the time at which the task at the head
+                         * of the blocked list must be removed from the Blocked
+                         * state -  so record the item value in
+                         * xNextTaskUnblockTime. */
+                        xNextTaskUnblockTime = xItemValue;
+ 80005ca:	4a5c      	ldr	r2, [pc, #368]	; (800073c <xTaskIncrementTick+0x1f4>)
+ 80005cc:	68fb      	ldr	r3, [r7, #12]
+ 80005ce:	6013      	str	r3, [r2, #0]
+                        break; /*lint !e9011 Code structure here is deemed easier to understand with multiple breaks. */
+ 80005d0:	e08b      	b.n	80006ea <xTaskIncrementTick+0x1a2>
+                    {
+                        mtCOVERAGE_TEST_MARKER();
+                    }
+
+                    /* It is time to remove the item from the Blocked state. */
+                    listREMOVE_ITEM( &( pxTCB->xStateListItem ) );
+ 80005d2:	693b      	ldr	r3, [r7, #16]
+ 80005d4:	695b      	ldr	r3, [r3, #20]
+ 80005d6:	60bb      	str	r3, [r7, #8]
+ 80005d8:	693b      	ldr	r3, [r7, #16]
+ 80005da:	689b      	ldr	r3, [r3, #8]
+ 80005dc:	693a      	ldr	r2, [r7, #16]
+ 80005de:	68d2      	ldr	r2, [r2, #12]
+ 80005e0:	609a      	str	r2, [r3, #8]
+ 80005e2:	693b      	ldr	r3, [r7, #16]
+ 80005e4:	68db      	ldr	r3, [r3, #12]
+ 80005e6:	693a      	ldr	r2, [r7, #16]
+ 80005e8:	6892      	ldr	r2, [r2, #8]
+ 80005ea:	605a      	str	r2, [r3, #4]
+ 80005ec:	68bb      	ldr	r3, [r7, #8]
+ 80005ee:	685a      	ldr	r2, [r3, #4]
+ 80005f0:	693b      	ldr	r3, [r7, #16]
+ 80005f2:	3304      	adds	r3, #4
+ 80005f4:	429a      	cmp	r2, r3
+ 80005f6:	d103      	bne.n	8000600 <xTaskIncrementTick+0xb8>
+ 80005f8:	693b      	ldr	r3, [r7, #16]
+ 80005fa:	68da      	ldr	r2, [r3, #12]
+ 80005fc:	68bb      	ldr	r3, [r7, #8]
+ 80005fe:	605a      	str	r2, [r3, #4]
+ 8000600:	693b      	ldr	r3, [r7, #16]
+ 8000602:	2200      	movs	r2, #0
+ 8000604:	615a      	str	r2, [r3, #20]
+ 8000606:	68bb      	ldr	r3, [r7, #8]
+ 8000608:	681b      	ldr	r3, [r3, #0]
+ 800060a:	1e5a      	subs	r2, r3, #1
+ 800060c:	68bb      	ldr	r3, [r7, #8]
+ 800060e:	601a      	str	r2, [r3, #0]
+
+                    /* Is the task waiting on an event also?  If so remove
+                     * it from the event list. */
+                    if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) ) != NULL )
+ 8000610:	693b      	ldr	r3, [r7, #16]
+ 8000612:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 8000614:	2b00      	cmp	r3, #0
+ 8000616:	d01e      	beq.n	8000656 <xTaskIncrementTick+0x10e>
+                    {
+                        listREMOVE_ITEM( &( pxTCB->xEventListItem ) );
+ 8000618:	693b      	ldr	r3, [r7, #16]
+ 800061a:	6a9b      	ldr	r3, [r3, #40]	; 0x28
+ 800061c:	607b      	str	r3, [r7, #4]
+ 800061e:	693b      	ldr	r3, [r7, #16]
+ 8000620:	69db      	ldr	r3, [r3, #28]
+ 8000622:	693a      	ldr	r2, [r7, #16]
+ 8000624:	6a12      	ldr	r2, [r2, #32]
+ 8000626:	609a      	str	r2, [r3, #8]
+ 8000628:	693b      	ldr	r3, [r7, #16]
+ 800062a:	6a1b      	ldr	r3, [r3, #32]
+ 800062c:	693a      	ldr	r2, [r7, #16]
+ 800062e:	69d2      	ldr	r2, [r2, #28]
+ 8000630:	605a      	str	r2, [r3, #4]
+ 8000632:	687b      	ldr	r3, [r7, #4]
+ 8000634:	685a      	ldr	r2, [r3, #4]
+ 8000636:	693b      	ldr	r3, [r7, #16]
+ 8000638:	3318      	adds	r3, #24
+ 800063a:	429a      	cmp	r2, r3
+ 800063c:	d103      	bne.n	8000646 <xTaskIncrementTick+0xfe>
+ 800063e:	693b      	ldr	r3, [r7, #16]
+ 8000640:	6a1a      	ldr	r2, [r3, #32]
+ 8000642:	687b      	ldr	r3, [r7, #4]
+ 8000644:	605a      	str	r2, [r3, #4]
+ 8000646:	693b      	ldr	r3, [r7, #16]
+ 8000648:	2200      	movs	r2, #0
+ 800064a:	629a      	str	r2, [r3, #40]	; 0x28
+ 800064c:	687b      	ldr	r3, [r7, #4]
+ 800064e:	681b      	ldr	r3, [r3, #0]
+ 8000650:	1e5a      	subs	r2, r3, #1
+ 8000652:	687b      	ldr	r3, [r7, #4]
+ 8000654:	601a      	str	r2, [r3, #0]
+                        mtCOVERAGE_TEST_MARKER();
+                    }
+
+                    /* Place the unblocked task into the appropriate ready
+                     * list. */
+                    prvAddTaskToReadyList( pxTCB );
+ 8000656:	693b      	ldr	r3, [r7, #16]
+ 8000658:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 800065a:	2201      	movs	r2, #1
+ 800065c:	409a      	lsls	r2, r3
+ 800065e:	4b38      	ldr	r3, [pc, #224]	; (8000740 <xTaskIncrementTick+0x1f8>)
+ 8000660:	681b      	ldr	r3, [r3, #0]
+ 8000662:	4313      	orrs	r3, r2
+ 8000664:	4a36      	ldr	r2, [pc, #216]	; (8000740 <xTaskIncrementTick+0x1f8>)
+ 8000666:	6013      	str	r3, [r2, #0]
+ 8000668:	693b      	ldr	r3, [r7, #16]
+ 800066a:	6ada      	ldr	r2, [r3, #44]	; 0x2c
+ 800066c:	4935      	ldr	r1, [pc, #212]	; (8000744 <xTaskIncrementTick+0x1fc>)
+ 800066e:	4613      	mov	r3, r2
+ 8000670:	009b      	lsls	r3, r3, #2
+ 8000672:	4413      	add	r3, r2
+ 8000674:	009b      	lsls	r3, r3, #2
+ 8000676:	440b      	add	r3, r1
+ 8000678:	3304      	adds	r3, #4
+ 800067a:	681b      	ldr	r3, [r3, #0]
+ 800067c:	603b      	str	r3, [r7, #0]
+ 800067e:	693b      	ldr	r3, [r7, #16]
+ 8000680:	683a      	ldr	r2, [r7, #0]
+ 8000682:	609a      	str	r2, [r3, #8]
+ 8000684:	683b      	ldr	r3, [r7, #0]
+ 8000686:	689a      	ldr	r2, [r3, #8]
+ 8000688:	693b      	ldr	r3, [r7, #16]
+ 800068a:	60da      	str	r2, [r3, #12]
+ 800068c:	683b      	ldr	r3, [r7, #0]
+ 800068e:	689b      	ldr	r3, [r3, #8]
+ 8000690:	693a      	ldr	r2, [r7, #16]
+ 8000692:	3204      	adds	r2, #4
+ 8000694:	605a      	str	r2, [r3, #4]
+ 8000696:	693b      	ldr	r3, [r7, #16]
+ 8000698:	1d1a      	adds	r2, r3, #4
+ 800069a:	683b      	ldr	r3, [r7, #0]
+ 800069c:	609a      	str	r2, [r3, #8]
+ 800069e:	693b      	ldr	r3, [r7, #16]
+ 80006a0:	6ada      	ldr	r2, [r3, #44]	; 0x2c
+ 80006a2:	4613      	mov	r3, r2
+ 80006a4:	009b      	lsls	r3, r3, #2
+ 80006a6:	4413      	add	r3, r2
+ 80006a8:	009b      	lsls	r3, r3, #2
+ 80006aa:	4a26      	ldr	r2, [pc, #152]	; (8000744 <xTaskIncrementTick+0x1fc>)
+ 80006ac:	441a      	add	r2, r3
+ 80006ae:	693b      	ldr	r3, [r7, #16]
+ 80006b0:	615a      	str	r2, [r3, #20]
+ 80006b2:	693b      	ldr	r3, [r7, #16]
+ 80006b4:	6ada      	ldr	r2, [r3, #44]	; 0x2c
+ 80006b6:	4923      	ldr	r1, [pc, #140]	; (8000744 <xTaskIncrementTick+0x1fc>)
+ 80006b8:	4613      	mov	r3, r2
+ 80006ba:	009b      	lsls	r3, r3, #2
+ 80006bc:	4413      	add	r3, r2
+ 80006be:	009b      	lsls	r3, r3, #2
+ 80006c0:	440b      	add	r3, r1
+ 80006c2:	681b      	ldr	r3, [r3, #0]
+ 80006c4:	1c59      	adds	r1, r3, #1
+ 80006c6:	481f      	ldr	r0, [pc, #124]	; (8000744 <xTaskIncrementTick+0x1fc>)
+ 80006c8:	4613      	mov	r3, r2
+ 80006ca:	009b      	lsls	r3, r3, #2
+ 80006cc:	4413      	add	r3, r2
+ 80006ce:	009b      	lsls	r3, r3, #2
+ 80006d0:	4403      	add	r3, r0
+ 80006d2:	6019      	str	r1, [r3, #0]
+                        {
+                            /* Preemption is on, but a context switch should
+                             * only be performed if the unblocked task has a
+                             * priority that is equal to or higher than the
+                             * currently executing task. */
+                            if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
+ 80006d4:	693b      	ldr	r3, [r7, #16]
+ 80006d6:	6ada      	ldr	r2, [r3, #44]	; 0x2c
+ 80006d8:	4b1b      	ldr	r3, [pc, #108]	; (8000748 <xTaskIncrementTick+0x200>)
+ 80006da:	681b      	ldr	r3, [r3, #0]
+ 80006dc:	6adb      	ldr	r3, [r3, #44]	; 0x2c
+ 80006de:	429a      	cmp	r2, r3
+ 80006e0:	f4ff af5d 	bcc.w	800059e <xTaskIncrementTick+0x56>
+                            {
+                                xSwitchRequired = pdTRUE;
+ 80006e4:	2301      	movs	r3, #1
+ 80006e6:	61fb      	str	r3, [r7, #28]
+                if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+ 80006e8:	e759      	b.n	800059e <xTaskIncrementTick+0x56>
+        /* Tasks of equal priority to the currently running task will share
+         * processing time (time slice) if preemption is on, and the application
+         * writer has not explicitly turned time slicing off. */
+        #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
+            {
+                if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ pxCurrentTCB->uxPriority ] ) ) > ( UBaseType_t ) 1 )
+ 80006ea:	4b17      	ldr	r3, [pc, #92]	; (8000748 <xTaskIncrementTick+0x200>)
+ 80006ec:	681b      	ldr	r3, [r3, #0]
+ 80006ee:	6ada      	ldr	r2, [r3, #44]	; 0x2c
+ 80006f0:	4914      	ldr	r1, [pc, #80]	; (8000744 <xTaskIncrementTick+0x1fc>)
+ 80006f2:	4613      	mov	r3, r2
+ 80006f4:	009b      	lsls	r3, r3, #2
+ 80006f6:	4413      	add	r3, r2
+ 80006f8:	009b      	lsls	r3, r3, #2
+ 80006fa:	440b      	add	r3, r1
+ 80006fc:	681b      	ldr	r3, [r3, #0]
+ 80006fe:	2b01      	cmp	r3, #1
+ 8000700:	d901      	bls.n	8000706 <xTaskIncrementTick+0x1be>
+                {
+                    xSwitchRequired = pdTRUE;
+ 8000702:	2301      	movs	r3, #1
+ 8000704:	61fb      	str	r3, [r7, #28]
+            }
+        #endif /* configUSE_TICK_HOOK */
+
+        #if ( configUSE_PREEMPTION == 1 )
+            {
+                if( xYieldPending != pdFALSE )
+ 8000706:	4b11      	ldr	r3, [pc, #68]	; (800074c <xTaskIncrementTick+0x204>)
+ 8000708:	681b      	ldr	r3, [r3, #0]
+ 800070a:	2b00      	cmp	r3, #0
+ 800070c:	d007      	beq.n	800071e <xTaskIncrementTick+0x1d6>
+                {
+                    xSwitchRequired = pdTRUE;
+ 800070e:	2301      	movs	r3, #1
+ 8000710:	61fb      	str	r3, [r7, #28]
+ 8000712:	e004      	b.n	800071e <xTaskIncrementTick+0x1d6>
+            }
+        #endif /* configUSE_PREEMPTION */
+    }
+    else
+    {
+        ++xPendedTicks;
+ 8000714:	4b0e      	ldr	r3, [pc, #56]	; (8000750 <xTaskIncrementTick+0x208>)
+ 8000716:	681b      	ldr	r3, [r3, #0]
+ 8000718:	3301      	adds	r3, #1
+ 800071a:	4a0d      	ldr	r2, [pc, #52]	; (8000750 <xTaskIncrementTick+0x208>)
+ 800071c:	6013      	str	r3, [r2, #0]
+                vApplicationTickHook();
+            }
+        #endif
+    }
+
+    return xSwitchRequired;
+ 800071e:	69fb      	ldr	r3, [r7, #28]
+}
+ 8000720:	4618      	mov	r0, r3
+ 8000722:	3720      	adds	r7, #32
+ 8000724:	46bd      	mov	sp, r7
+ 8000726:	bd80      	pop	{r7, pc}
+ 8000728:	200000ac 	.word	0x200000ac
+ 800072c:	20000094 	.word	0x20000094
+ 8000730:	2000008c 	.word	0x2000008c
+ 8000734:	20000090 	.word	0x20000090
+ 8000738:	200000a4 	.word	0x200000a4
+ 800073c:	200000a8 	.word	0x200000a8
+ 8000740:	20000098 	.word	0x20000098
+ 8000744:	20000028 	.word	0x20000028
+ 8000748:	20000024 	.word	0x20000024
+ 800074c:	200000a0 	.word	0x200000a0
+ 8000750:	2000009c 	.word	0x2000009c
+
+08000754 <vTaskSwitchContext>:
+
+#endif /* configUSE_APPLICATION_TASK_TAG */
+/*-----------------------------------------------------------*/
+
+void vTaskSwitchContext( void )
+{
+ 8000754:	b480      	push	{r7}
+ 8000756:	b085      	sub	sp, #20
+ 8000758:	af00      	add	r7, sp, #0
+    if( uxSchedulerSuspended != ( UBaseType_t ) pdFALSE )
+ 800075a:	4b1c      	ldr	r3, [pc, #112]	; (80007cc <vTaskSwitchContext+0x78>)
+ 800075c:	681b      	ldr	r3, [r3, #0]
+ 800075e:	2b00      	cmp	r3, #0
+ 8000760:	d003      	beq.n	800076a <vTaskSwitchContext+0x16>
+    {
+        /* The scheduler is currently suspended - do not allow a context
+         * switch. */
+        xYieldPending = pdTRUE;
+ 8000762:	4b1b      	ldr	r3, [pc, #108]	; (80007d0 <vTaskSwitchContext+0x7c>)
+ 8000764:	2201      	movs	r2, #1
+ 8000766:	601a      	str	r2, [r3, #0]
+                 * for additional information. */
+                _impure_ptr = &( pxCurrentTCB->xNewLib_reent );
+            }
+        #endif /* configUSE_NEWLIB_REENTRANT */
+    }
+}
+ 8000768:	e02a      	b.n	80007c0 <vTaskSwitchContext+0x6c>
+        xYieldPending = pdFALSE;
+ 800076a:	4b19      	ldr	r3, [pc, #100]	; (80007d0 <vTaskSwitchContext+0x7c>)
+ 800076c:	2200      	movs	r2, #0
+ 800076e:	601a      	str	r2, [r3, #0]
+        taskSELECT_HIGHEST_PRIORITY_TASK(); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+ 8000770:	4b18      	ldr	r3, [pc, #96]	; (80007d4 <vTaskSwitchContext+0x80>)
+ 8000772:	681b      	ldr	r3, [r3, #0]
+ 8000774:	607b      	str	r3, [r7, #4]
+/* Generic helper function. */
+        __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t ulBitmap )
+        {
+            uint8_t ucReturn;
+
+            __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) : "memory" );
+ 8000776:	687b      	ldr	r3, [r7, #4]
+ 8000778:	fab3 f383 	clz	r3, r3
+ 800077c:	70fb      	strb	r3, [r7, #3]
+
+            return ucReturn;
+ 800077e:	78fb      	ldrb	r3, [r7, #3]
+ 8000780:	f1c3 031f 	rsb	r3, r3, #31
+ 8000784:	60fb      	str	r3, [r7, #12]
+ 8000786:	68fa      	ldr	r2, [r7, #12]
+ 8000788:	4613      	mov	r3, r2
+ 800078a:	009b      	lsls	r3, r3, #2
+ 800078c:	4413      	add	r3, r2
+ 800078e:	009b      	lsls	r3, r3, #2
+ 8000790:	4a11      	ldr	r2, [pc, #68]	; (80007d8 <vTaskSwitchContext+0x84>)
+ 8000792:	4413      	add	r3, r2
+ 8000794:	60bb      	str	r3, [r7, #8]
+ 8000796:	68bb      	ldr	r3, [r7, #8]
+ 8000798:	685b      	ldr	r3, [r3, #4]
+ 800079a:	685a      	ldr	r2, [r3, #4]
+ 800079c:	68bb      	ldr	r3, [r7, #8]
+ 800079e:	605a      	str	r2, [r3, #4]
+ 80007a0:	68bb      	ldr	r3, [r7, #8]
+ 80007a2:	685a      	ldr	r2, [r3, #4]
+ 80007a4:	68bb      	ldr	r3, [r7, #8]
+ 80007a6:	3308      	adds	r3, #8
+ 80007a8:	429a      	cmp	r2, r3
+ 80007aa:	d104      	bne.n	80007b6 <vTaskSwitchContext+0x62>
+ 80007ac:	68bb      	ldr	r3, [r7, #8]
+ 80007ae:	685b      	ldr	r3, [r3, #4]
+ 80007b0:	685a      	ldr	r2, [r3, #4]
+ 80007b2:	68bb      	ldr	r3, [r7, #8]
+ 80007b4:	605a      	str	r2, [r3, #4]
+ 80007b6:	68bb      	ldr	r3, [r7, #8]
+ 80007b8:	685b      	ldr	r3, [r3, #4]
+ 80007ba:	68db      	ldr	r3, [r3, #12]
+ 80007bc:	4a07      	ldr	r2, [pc, #28]	; (80007dc <vTaskSwitchContext+0x88>)
+ 80007be:	6013      	str	r3, [r2, #0]
+}
+ 80007c0:	bf00      	nop
+ 80007c2:	3714      	adds	r7, #20
+ 80007c4:	46bd      	mov	sp, r7
+ 80007c6:	bc80      	pop	{r7}
+ 80007c8:	4770      	bx	lr
+ 80007ca:	bf00      	nop
+ 80007cc:	200000ac 	.word	0x200000ac
+ 80007d0:	200000a0 	.word	0x200000a0
+ 80007d4:	20000098 	.word	0x20000098
+ 80007d8:	20000028 	.word	0x20000028
+ 80007dc:	20000024 	.word	0x20000024
+
+080007e0 <prvResetNextTaskUnblockTime>:
+
+#endif /* INCLUDE_vTaskDelete */
+/*-----------------------------------------------------------*/
+
+static void prvResetNextTaskUnblockTime( void )
+{
+ 80007e0:	b480      	push	{r7}
+ 80007e2:	af00      	add	r7, sp, #0
+    if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+ 80007e4:	4b09      	ldr	r3, [pc, #36]	; (800080c <prvResetNextTaskUnblockTime+0x2c>)
+ 80007e6:	681b      	ldr	r3, [r3, #0]
+ 80007e8:	681b      	ldr	r3, [r3, #0]
+ 80007ea:	2b00      	cmp	r3, #0
+ 80007ec:	d104      	bne.n	80007f8 <prvResetNextTaskUnblockTime+0x18>
+    {
+        /* The new current delayed list is empty.  Set xNextTaskUnblockTime to
+         * the maximum possible value so it is  extremely unlikely that the
+         * if( xTickCount >= xNextTaskUnblockTime ) test will pass until
+         * there is an item in the delayed list. */
+        xNextTaskUnblockTime = portMAX_DELAY;
+ 80007ee:	4b08      	ldr	r3, [pc, #32]	; (8000810 <prvResetNextTaskUnblockTime+0x30>)
+ 80007f0:	f04f 32ff 	mov.w	r2, #4294967295
+ 80007f4:	601a      	str	r2, [r3, #0]
+         * the item at the head of the delayed list.  This is the time at
+         * which the task at the head of the delayed list should be removed
+         * from the Blocked state. */
+        xNextTaskUnblockTime = listGET_ITEM_VALUE_OF_HEAD_ENTRY( pxDelayedTaskList );
+    }
+}
+ 80007f6:	e005      	b.n	8000804 <prvResetNextTaskUnblockTime+0x24>
+        xNextTaskUnblockTime = listGET_ITEM_VALUE_OF_HEAD_ENTRY( pxDelayedTaskList );
+ 80007f8:	4b04      	ldr	r3, [pc, #16]	; (800080c <prvResetNextTaskUnblockTime+0x2c>)
+ 80007fa:	681b      	ldr	r3, [r3, #0]
+ 80007fc:	68db      	ldr	r3, [r3, #12]
+ 80007fe:	681b      	ldr	r3, [r3, #0]
+ 8000800:	4a03      	ldr	r2, [pc, #12]	; (8000810 <prvResetNextTaskUnblockTime+0x30>)
+ 8000802:	6013      	str	r3, [r2, #0]
+}
+ 8000804:	bf00      	nop
+ 8000806:	46bd      	mov	sp, r7
+ 8000808:	bc80      	pop	{r7}
+ 800080a:	4770      	bx	lr
+ 800080c:	2000008c 	.word	0x2000008c
+ 8000810:	200000a8 	.word	0x200000a8
+	...
+
+08000820 <SVC_Handler>:
+}
+/*-----------------------------------------------------------*/
+
+void vPortSVCHandler( void )
+{
+    __asm volatile (
+ 8000820:	4b07      	ldr	r3, [pc, #28]	; (8000840 <pxCurrentTCBConst2>)
+ 8000822:	6819      	ldr	r1, [r3, #0]
+ 8000824:	6808      	ldr	r0, [r1, #0]
+ 8000826:	e8b0 0ff0 	ldmia.w	r0!, {r4, r5, r6, r7, r8, r9, sl, fp}
+ 800082a:	f380 8809 	msr	PSP, r0
+ 800082e:	f3bf 8f6f 	isb	sy
+ 8000832:	f04f 0000 	mov.w	r0, #0
+ 8000836:	f380 8811 	msr	BASEPRI, r0
+ 800083a:	f04e 0e0d 	orr.w	lr, lr, #13
+ 800083e:	4770      	bx	lr
+
+08000840 <pxCurrentTCBConst2>:
+ 8000840:	20000024 	.word	0x20000024
+        "	bx r14							\n"
+        "									\n"
+        "	.align 4						\n"
+        "pxCurrentTCBConst2: .word pxCurrentTCB				\n"
+        );
+}
+ 8000844:	bf00      	nop
+ 8000846:	bf00      	nop
+	...
+
+08000850 <PendSV_Handler>:
+
+void xPortPendSVHandler( void )
+{
+    /* This is a naked function. */
+
+    __asm volatile
+ 8000850:	f3ef 8009 	mrs	r0, PSP
+ 8000854:	f3bf 8f6f 	isb	sy
+ 8000858:	4b0d      	ldr	r3, [pc, #52]	; (8000890 <pxCurrentTCBConst>)
+ 800085a:	681a      	ldr	r2, [r3, #0]
+ 800085c:	e920 0ff0 	stmdb	r0!, {r4, r5, r6, r7, r8, r9, sl, fp}
+ 8000860:	6010      	str	r0, [r2, #0]
+ 8000862:	e92d 4008 	stmdb	sp!, {r3, lr}
+ 8000866:	f04f 00bf 	mov.w	r0, #191	; 0xbf
+ 800086a:	f380 8811 	msr	BASEPRI, r0
+ 800086e:	f7ff ff71 	bl	8000754 <vTaskSwitchContext>
+ 8000872:	f04f 0000 	mov.w	r0, #0
+ 8000876:	f380 8811 	msr	BASEPRI, r0
+ 800087a:	e8bd 4008 	ldmia.w	sp!, {r3, lr}
+ 800087e:	6819      	ldr	r1, [r3, #0]
+ 8000880:	6808      	ldr	r0, [r1, #0]
+ 8000882:	e8b0 0ff0 	ldmia.w	r0!, {r4, r5, r6, r7, r8, r9, sl, fp}
+ 8000886:	f380 8809 	msr	PSP, r0
+ 800088a:	f3bf 8f6f 	isb	sy
+ 800088e:	4770      	bx	lr
+
+08000890 <pxCurrentTCBConst>:
+ 8000890:	20000024 	.word	0x20000024
+        "										\n"
+        "	.align 4							\n"
+        "pxCurrentTCBConst: .word pxCurrentTCB	\n"
+        ::"i" ( configMAX_SYSCALL_INTERRUPT_PRIORITY )
+    );
+}
+ 8000894:	bf00      	nop
+ 8000896:	bf00      	nop
+
+08000898 <SysTick_Handler>:
+/*-----------------------------------------------------------*/
+
+void xPortSysTickHandler( void )
+{
+ 8000898:	b580      	push	{r7, lr}
+ 800089a:	b082      	sub	sp, #8
+ 800089c:	af00      	add	r7, sp, #0
+
+    portFORCE_INLINE static void vPortRaiseBASEPRI( void )
+    {
+        uint32_t ulNewBASEPRI;
+
+        __asm volatile
+ 800089e:	f04f 03bf 	mov.w	r3, #191	; 0xbf
+ 80008a2:	f383 8811 	msr	BASEPRI, r3
+ 80008a6:	f3bf 8f6f 	isb	sy
+ 80008aa:	f3bf 8f4f 	dsb	sy
+ 80008ae:	607b      	str	r3, [r7, #4]
+     * save and then restore the interrupt mask value as its value is already
+     * known. */
+    portDISABLE_INTERRUPTS();
+    {
+        /* Increment the RTOS tick. */
+        if( xTaskIncrementTick() != pdFALSE )
+ 80008b0:	f7ff fe4a 	bl	8000548 <xTaskIncrementTick>
+ 80008b4:	4603      	mov	r3, r0
+ 80008b6:	2b00      	cmp	r3, #0
+ 80008b8:	d003      	beq.n	80008c2 <SysTick_Handler+0x2a>
+        {
+            /* A context switch is required.  Context switching is performed in
+             * the PendSV interrupt.  Pend the PendSV interrupt. */
+            portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
+ 80008ba:	4b06      	ldr	r3, [pc, #24]	; (80008d4 <SysTick_Handler+0x3c>)
+ 80008bc:	f04f 5280 	mov.w	r2, #268435456	; 0x10000000
+ 80008c0:	601a      	str	r2, [r3, #0]
+ 80008c2:	2300      	movs	r3, #0
+ 80008c4:	603b      	str	r3, [r7, #0]
+    }
+/*-----------------------------------------------------------*/
+
+    portFORCE_INLINE static void vPortSetBASEPRI( uint32_t ulNewMaskValue )
+    {
+        __asm volatile
+ 80008c6:	683b      	ldr	r3, [r7, #0]
+ 80008c8:	f383 8811 	msr	BASEPRI, r3
+        }
+    }
+    portENABLE_INTERRUPTS();
+}
+ 80008cc:	bf00      	nop
+ 80008ce:	3708      	adds	r7, #8
+ 80008d0:	46bd      	mov	sp, r7
+ 80008d2:	bd80      	pop	{r7, pc}
+ 80008d4:	e000ed04 	.word	0xe000ed04
+
+080008d8 <MCU_HW_Init>:
+
+
+/*Global Variables*/
+
+void MCU_HW_Init(void)
+{
+ 80008d8:	b580      	push	{r7, lr}
+ 80008da:	b082      	sub	sp, #8
+ 80008dc:	af00      	add	r7, sp, #0
+	Timer2_init(); //for delay
+ 80008de:	f7ff fd89 	bl	80003f4 <Timer2_init>
+
+	RCC_GPIOA_CLOCK_EN();
+ 80008e2:	4b0e      	ldr	r3, [pc, #56]	; (800091c <MCU_HW_Init+0x44>)
+ 80008e4:	699b      	ldr	r3, [r3, #24]
+ 80008e6:	4a0d      	ldr	r2, [pc, #52]	; (800091c <MCU_HW_Init+0x44>)
+ 80008e8:	f043 0304 	orr.w	r3, r3, #4
+ 80008ec:	6193      	str	r3, [r2, #24]
+	GPIO_Pin_Configure_t DIO_DoorConfig;
+	DIO_DoorConfig.GPIO_Pin_Number=DIO_Door;
+ 80008ee:	2308      	movs	r3, #8
+ 80008f0:	80bb      	strh	r3, [r7, #4]
+	DIO_DoorConfig.GPIO_MODE = GPIO_MODE_INPUT_FLO;
+ 80008f2:	2301      	movs	r3, #1
+ 80008f4:	71bb      	strb	r3, [r7, #6]
+	MCAL_GPIO_Init(GPIO_Port_Used, &DIO_DoorConfig);
+ 80008f6:	1d3b      	adds	r3, r7, #4
+ 80008f8:	4619      	mov	r1, r3
+ 80008fa:	4809      	ldr	r0, [pc, #36]	; (8000920 <MCU_HW_Init+0x48>)
+ 80008fc:	f7ff fcc7 	bl	800028e <MCAL_GPIO_Init>
+
+	GPIO_Pin_Configure_t DIO_LedConfig;
+	DIO_LedConfig.GPIO_Pin_Number=DIO_Led;
+ 8000900:	2380      	movs	r3, #128	; 0x80
+ 8000902:	803b      	strh	r3, [r7, #0]
+	DIO_LedConfig.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
+ 8000904:	2304      	movs	r3, #4
+ 8000906:	70bb      	strb	r3, [r7, #2]
+	MCAL_GPIO_Init(GPIO_Port_Used, &DIO_LedConfig);
+ 8000908:	463b      	mov	r3, r7
+ 800090a:	4619      	mov	r1, r3
+ 800090c:	4804      	ldr	r0, [pc, #16]	; (8000920 <MCU_HW_Init+0x48>)
+ 800090e:	f7ff fcbe 	bl	800028e <MCAL_GPIO_Init>
+}
+ 8000912:	bf00      	nop
+ 8000914:	3708      	adds	r7, #8
+ 8000916:	46bd      	mov	sp, r7
+ 8000918:	bd80      	pop	{r7, pc}
+ 800091a:	bf00      	nop
+ 800091c:	40021000 	.word	0x40021000
+ 8000920:	40010800 	.word	0x40010800
+
+08000924 <StartOs>:
+
+
+void StartOs()
+{
+ 8000924:	b580      	push	{r7, lr}
+ 8000926:	b082      	sub	sp, #8
+ 8000928:	af00      	add	r7, sp, #0
+	uint8_t tick=0;
+ 800092a:	2300      	movs	r3, #0
+ 800092c:	71fb      	strb	r3, [r7, #7]
+
+	while(1)
+	{
+		if(tick==10)
+ 800092e:	79fb      	ldrb	r3, [r7, #7]
+ 8000930:	2b0a      	cmp	r3, #10
+ 8000932:	d105      	bne.n	8000940 <StartOs+0x1c>
+		{
+			Run_ReadDoorSensor();
+ 8000934:	f7ff fdc2 	bl	80004bc <Run_ReadDoorSensor>
+			tick++;
+ 8000938:	79fb      	ldrb	r3, [r7, #7]
+ 800093a:	3301      	adds	r3, #1
+ 800093c:	71fb      	strb	r3, [r7, #7]
+ 800093e:	e7f6      	b.n	800092e <StartOs+0xa>
+		}
+		else if(tick==12)
+ 8000940:	79fb      	ldrb	r3, [r7, #7]
+ 8000942:	2b0c      	cmp	r3, #12
+ 8000944:	d104      	bne.n	8000950 <StartOs+0x2c>
+		{
+			Run_DoorLockAlgo();
+ 8000946:	f7ff fde7 	bl	8000518 <Run_DoorLockAlgo>
+			tick=0;
+ 800094a:	2300      	movs	r3, #0
+ 800094c:	71fb      	strb	r3, [r7, #7]
+ 800094e:	e7ee      	b.n	800092e <StartOs+0xa>
+		}
+		else
+		{
+			tick++;
+ 8000950:	79fb      	ldrb	r3, [r7, #7]
+ 8000952:	3301      	adds	r3, #1
+ 8000954:	71fb      	strb	r3, [r7, #7]
+		if(tick==10)
+ 8000956:	e7ea      	b.n	800092e <StartOs+0xa>
+
+08000958 <main>:
+	}
+	dms(10);
+}
+
+int main(void)
+{
+ 8000958:	b580      	push	{r7, lr}
+ 800095a:	af00      	add	r7, sp, #0
+	MCU_HW_Init();
+ 800095c:	f7ff ffbc 	bl	80008d8 <MCU_HW_Init>
+	StartOs();
+ 8000960:	f7ff ffe0 	bl	8000924 <StartOs>
+
+	while(1)
+ 8000964:	e7fe      	b.n	8000964 <main+0xc>
+	...
+
+08000968 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000968:	480d      	ldr	r0, [pc, #52]	; (80009a0 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800096a:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 800096c:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000970:	480c      	ldr	r0, [pc, #48]	; (80009a4 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000972:	490d      	ldr	r1, [pc, #52]	; (80009a8 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000974:	4a0d      	ldr	r2, [pc, #52]	; (80009ac <LoopForever+0xe>)
+  movs r3, #0
+ 8000976:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000978:	e002      	b.n	8000980 <LoopCopyDataInit>
+
+0800097a <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 800097a:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 800097c:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 800097e:	3304      	adds	r3, #4
+
+08000980 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000980:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000982:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000984:	d3f9      	bcc.n	800097a <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000986:	4a0a      	ldr	r2, [pc, #40]	; (80009b0 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000988:	4c0a      	ldr	r4, [pc, #40]	; (80009b4 <LoopForever+0x16>)
+  movs r3, #0
+ 800098a:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 800098c:	e001      	b.n	8000992 <LoopFillZerobss>
+
+0800098e <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 800098e:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000990:	3204      	adds	r2, #4
+
+08000992 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000992:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000994:	d3fb      	bcc.n	800098e <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000996:	f000 f811 	bl	80009bc <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 800099a:	f7ff ffdd 	bl	8000958 <main>
+
+0800099e <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 800099e:	e7fe      	b.n	800099e <LoopForever>
+  ldr   r0, =_estack
+ 80009a0:	20002800 	.word	0x20002800
+  ldr r0, =_sdata
+ 80009a4:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 80009a8:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 80009ac:	08000a2c 	.word	0x08000a2c
+  ldr r2, =_sbss
+ 80009b0:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 80009b4:	200000b8 	.word	0x200000b8
+
+080009b8 <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 80009b8:	e7fe      	b.n	80009b8 <ADC1_2_IRQHandler>
+	...
+
+080009bc <__libc_init_array>:
+ 80009bc:	b570      	push	{r4, r5, r6, lr}
+ 80009be:	2500      	movs	r5, #0
+ 80009c0:	4e0c      	ldr	r6, [pc, #48]	; (80009f4 <__libc_init_array+0x38>)
+ 80009c2:	4c0d      	ldr	r4, [pc, #52]	; (80009f8 <__libc_init_array+0x3c>)
+ 80009c4:	1ba4      	subs	r4, r4, r6
+ 80009c6:	10a4      	asrs	r4, r4, #2
+ 80009c8:	42a5      	cmp	r5, r4
+ 80009ca:	d109      	bne.n	80009e0 <__libc_init_array+0x24>
+ 80009cc:	f000 f81a 	bl	8000a04 <_init>
+ 80009d0:	2500      	movs	r5, #0
+ 80009d2:	4e0a      	ldr	r6, [pc, #40]	; (80009fc <__libc_init_array+0x40>)
+ 80009d4:	4c0a      	ldr	r4, [pc, #40]	; (8000a00 <__libc_init_array+0x44>)
+ 80009d6:	1ba4      	subs	r4, r4, r6
+ 80009d8:	10a4      	asrs	r4, r4, #2
+ 80009da:	42a5      	cmp	r5, r4
+ 80009dc:	d105      	bne.n	80009ea <__libc_init_array+0x2e>
+ 80009de:	bd70      	pop	{r4, r5, r6, pc}
+ 80009e0:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 80009e4:	4798      	blx	r3
+ 80009e6:	3501      	adds	r5, #1
+ 80009e8:	e7ee      	b.n	80009c8 <__libc_init_array+0xc>
+ 80009ea:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 80009ee:	4798      	blx	r3
+ 80009f0:	3501      	adds	r5, #1
+ 80009f2:	e7f2      	b.n	80009da <__libc_init_array+0x1e>
+ 80009f4:	08000a24 	.word	0x08000a24
+ 80009f8:	08000a24 	.word	0x08000a24
+ 80009fc:	08000a24 	.word	0x08000a24
+ 8000a00:	08000a28 	.word	0x08000a28
+
+08000a04 <_init>:
+ 8000a04:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000a06:	bf00      	nop
+ 8000a08:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000a0a:	bc08      	pop	{r3}
+ 8000a0c:	469e      	mov	lr, r3
+ 8000a0e:	4770      	bx	lr
+
+08000a10 <_fini>:
+ 8000a10:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000a12:	bf00      	nop
+ 8000a14:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000a16:	bc08      	pop	{r3}
+ 8000a18:	469e      	mov	lr, r3
+ 8000a1a:	4770      	bx	lr
