@@ -254,7 +254,7 @@
 												<CONTEXT-R-PORT-REF
 													DEST="R-PORT-PROTOTYPE">/SWCs/SWC2_DoorLockIndecationAlgo/ReqPort_ClServInterface_Led</CONTEXT-R-PORT-REF>
 												<TARGET-REQUIRED-OPERATION-REF
-													DEST="CLIENT-SERVER-OPERATION">/Interfaces/ClServInterface_Led/LedSS</TARGET-REQUIRED-OPERATION-REF>
+													DEST="CLIENT-SERVER-OPERATION">/Interfaces/ClServInterface_Led/Led</TARGET-REQUIRED-OPERATION-REF>
 											</OPERATION-IREF>
 										</SYNCHRONOUS-SERVER-CALL-POINT>
 									</SERVER-CALL-POINTS>
