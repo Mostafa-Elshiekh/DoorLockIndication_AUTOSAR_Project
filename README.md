@@ -1,4 +1,5 @@
-#Door Lock Indication AUTOSAR Project
+# Door Lock Indication AUTOSAR Project
+
 "I have developed a project named 'Door Lock Indication' within the AUTOSAR framework. This application, deployed at the application layer, is designed to monitor the car door's status. Upon detecting an open door, it triggers the activation of an internal LED illumination. The project comprises two Software Components (SWCs), each serving distinct functions. The first SWC encapsulates the Runnable responsible for algorithm execution, while the second SWC manages ECU abstraction. Inside the second SWC, there are two Runnables: one dedicated to door status monitoring and the other to control the LED light. Inter-SWC communication is facilitated through the Runtime Environment (RTE), and all Runnables are assigned specific tasks within the Real-Time Operating System (RTOS)."
 
 For this project, I utilized several tools to facilitate development, generation,debugging, simulation and testing:
