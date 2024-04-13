@@ -27,7 +27,6 @@ void Task_Run_DoorLockAlgo(void* params);
 
 void MCU_HW_Init(void)
 {
-	Timer2_init();
 
 	RCC_GPIOA_CLOCK_EN();
 	GPIO_Pin_Configure_t DIO_DoorConfig;
@@ -38,6 +37,7 @@ void MCU_HW_Init(void)
 	GPIO_Pin_Configure_t DIO_LedConfig;
 	DIO_LedConfig.GPIO_Pin_Number=DIO_Led;
 	DIO_LedConfig.GPIO_MODE = GPIO_MODE_OUTPUT_PP;
+	DIO_LedConfig.GPIO_OUTPUT_SPEED = GPIO_SPEED_10M;
 	MCAL_GPIO_Init(GPIO_Port_Used, &DIO_LedConfig);
 }
 
